@@ -19,7 +19,7 @@ A simple yet powerful Streamlit application for personal finance management and 
 
 ## 🛠️ Tech Stack
 
-- **Python 3.x**
+- **Python 3.13**
 - **Streamlit** - Web framework
 - **Pandas** - Data manipulation
 - **Session State** - In-app data storage
@@ -111,4 +111,5 @@ The app uses Streamlit's session state to persist data during the session. Expen
 Feel free to fork, modify, and improve!
 
 📄 License
+
 Open source - feel free to use and modify
