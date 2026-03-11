@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Constants
 CATEGORIES = ["Food", "Transport", "Shopping", "Bills", "Other"]
-COLUMNS = ["Date", "Category", "Description", "Amount"]
+COLUMNS = ["Date", "Category", "Description", "Amount", "Status"]
 
 
 def initialize_session_state() -> None:
@@ -28,7 +28,8 @@ def add_expense(
         "Date": [date],
         "Category": [category],
         "Description": [description],
-        "Amount": [amount]
+        "Amount": [amount],
+        "Status": ["active"]
     })
     
     # Add the new expense to expenses
@@ -38,9 +39,20 @@ def add_expense(
     )
     return True
 
-# Get all expenses from session state.
+# Get all active expenses from session state.
 def get_all_expenses() -> pd.DataFrame:
-    return st.session_state.expenses.copy()
+    df = st.session_state.expenses
+    if df.empty:
+        return df.copy()
+    return df[df["Status"] == "active"].copy()
+
+
+def get_archived_expenses() -> pd.DataFrame:
+    """Get all archived expenses."""
+    df = st.session_state.expenses
+    if df.empty:
+        return df.copy()
+    return df[df["Status"] == "archived"].copy()
 
 def get_total_spending() -> float:
     """Calculate total spending across all expenses."""
@@ -50,7 +62,7 @@ def get_total_spending() -> float:
 # Filter expenses by category.
 def filter_by_category(category: str) -> pd.DataFrame:
     
-    df = st.session_state.expenses
+    df = st.session_state.expenses[st.session_state.expenses["Status"] == "active"].copy()
     if df.empty or category == "All":
         return df.copy()
     return df[df["Category"] == category]
@@ -63,15 +75,15 @@ def get_filtered_total(category: str) -> float:
 
 
 def get_unique_categories() -> list:
-    """Get list of unique categories from expenses."""
-    df = st.session_state.expenses
+    """Get list of unique categories from active expenses."""
+    df = st.session_state.expenses[st.session_state.expenses["Status"] == "active"].copy()
     return list(df["Category"].unique()) if not df.empty else []
 
 
 def get_spending_by_category() -> pd.DataFrame:
-    # Get total spending grouped by category.
+    # Get total spending grouped by category (active expenses only).
 
-    df = st.session_state.expenses
+    df = st.session_state.expenses[st.session_state.expenses["Status"] == "active"].copy()
     if df.empty:
         return pd.DataFrame(columns=["Category", "Amount"])
     
@@ -80,9 +92,9 @@ def get_spending_by_category() -> pd.DataFrame:
 
 def get_spending_over_time() -> pd.DataFrame:
 
-    # Get daily spending over time.
+    # Get daily spending over time (active expenses only).
 
-    df = st.session_state.expenses
+    df = st.session_state.expenses[st.session_state.expenses["Status"] == "active"].copy()
     if df.empty:
         return pd.DataFrame(columns=["Date", "Amount"])
     
@@ -92,3 +104,36 @@ def get_spending_over_time() -> pd.DataFrame:
     # Group by date and sum amounts
     daily_spending = df.groupby("Date")["Amount"].sum().reset_index()
     return daily_spending.sort_values("Date")
+
+
+def edit_expense(index: int, date: datetime, category: str, description: str, amount: float) -> bool:
+    """Edit an existing expense by index."""
+    if not description or amount == 0:
+        return False
+    
+    if index < 0 or index >= len(st.session_state.expenses):
+        return False
+    
+    st.session_state.expenses.loc[index, "Date"] = date
+    st.session_state.expenses.loc[index, "Category"] = category
+    st.session_state.expenses.loc[index, "Description"] = description
+    st.session_state.expenses.loc[index, "Amount"] = amount
+    return True
+
+
+def delete_expense(index: int) -> bool:
+    """Soft delete an expense (mark as archived)."""
+    if index < 0 or index >= len(st.session_state.expenses):
+        return False
+    
+    st.session_state.expenses.loc[index, "Status"] = "archived"
+    return True
+
+
+def restore_expense(index: int) -> bool:
+    """Restore an archived expense."""
+    if index < 0 or index >= len(st.session_state.expenses):
+        return False
+    
+    st.session_state.expenses.loc[index, "Status"] = "active"
+    return True

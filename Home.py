@@ -24,21 +24,34 @@ st.set_page_config(
 initialize_session_state()
 
 # ========== DASHBOARD CONTENT ==========
-st.title("💸 Expense Tracker ni Ken")
-st.markdown(
-    """
-    Welcome to your personal expense tracker! 📊
-    
-    ### Features:
-    - 📝 **Add Expense** - Record your daily spending
-    - 📈 **View Expenses** - Analyze spending by category
-    - 📖 **About** - Learn more about the app
-    
-    Use the navigation menu on the left to get started!
-    """
-)
+st.title("Welcome to Expense Tracker ni Ken")
 
 st.divider()
+
+# Page Guidance Section
+st.subheader("📍 Page Guidance")
+st.markdown("Navigate through the app to manage your expenses effectively!")
+
+guidance_col1, guidance_col2, guidance_col3 = st.columns(3)
+
+with guidance_col1:
+    st.markdown("### 📝 Add Expense")
+    st.markdown("Record new expenses with date, category, description, and amount.")
+    st.page_link("pages/1_📝_Add_Expense.py", label="Go to Add Expense →", icon="➕")
+
+with guidance_col2:
+    st.markdown("### 📈 View Expenses")
+    st.markdown("Manage, edit, delete, and analyze all your expenses in one place.")
+    st.page_link("pages/2_📈_View_Expenses.py", label="Go to View Expenses →", icon="📊")
+
+with guidance_col3:
+    st.markdown("### 📖 Learn More")
+    st.markdown("Understand features, inputs, outputs, and how to use the app.")
+    st.page_link("pages/3_📖_About.py", label="Go to About →", icon="ℹ️")
+
+st.divider()
+
+# Button to go to Add Expense
 
 # Quick Stats Section
 st.subheader("📈 Quick Statistics")
@@ -49,12 +62,12 @@ try:
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric("💰 Total Spending", f"${total:.2f}")
+        st.metric("💰 Total Spending", f"₱{total:.2f}")
     with col2:
         st.metric("📝 Total Expenses", expense_count)
     with col3:
         avg_expense = (total / expense_count) if expense_count > 0 else 0
-        st.metric("📊 Average Expense", f"${avg_expense:.2f}")
+        st.metric("📊 Average Expense", f"₱{avg_expense:.2f}")
     
     st.divider()
     
@@ -89,6 +102,8 @@ try:
                 st.info("No time series data available yet.")
     else:
         st.info("Start by adding an expense to see statistics and charts!")
+    
+        st.page_link("pages/1_📝_Add_Expense.py", label="Go to Add Expense →")
         
 except Exception as e:
     st.error(f"An error occurred: {str(e)}")

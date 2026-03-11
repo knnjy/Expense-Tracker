@@ -22,7 +22,7 @@ with st.form("expense_form"):
     col1, col2 = st.columns(2)
     
     with col1:
-        date = st.date_input("Date", datetime.today())
+        date = st.date_input("Date", datetime.today(), max_value=datetime.today())
     
     with col2:
         category = st.selectbox("Category", CATEGORIES)
@@ -30,11 +30,11 @@ with st.form("expense_form"):
     description = st.text_input("Description")
     amount = st.number_input("Amount", min_value=0.0, format="%.2f")
     
-    submitted = st.form_submit_button("✅ Add Expense", use_container_width=True)
+    submitted = st.form_submit_button("Add Expense", use_container_width=True)
 
 if submitted:
     if add_expense(date, category, description, amount):
-        st.success("✨ Expense added successfully!")
+        st.success(f"✨ Added: {category} - {description} (₱{amount:.2f})")
         st.balloons()
     else:
         st.error("❌ Please complete all fields (description cannot be empty and amount must be greater than 0).")

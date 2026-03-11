@@ -17,11 +17,15 @@ st.markdown(
     """
     **Expense Tracker** is a personal finance management application that helps you:
     
-    - 📝 Record and track daily expenses with detailed information
-    - 📊 Analyze spending patterns by category
-    - 📈 Visualize spending trends over time
-    - 💰 Monitor total spending at a glance
-    - 🔍 Filter and review expenses by category
+    - 📝 **Record** daily expenses with detailed information (date, category, description, amount)
+    - ✏️ **Edit** existing expenses to correct or update information
+    - 🗑️ **Delete (Archive)** expenses - soft delete that keeps data for recovery
+    - ↩️ **Restore** archived expenses back to active
+    - 📊 **Analyze** spending patterns by category
+    - 📈 **Visualize** spending trends over time
+    - 💰 **Monitor** total spending at a glance
+    - 🔍 **Filter** and review expenses by category
+    - 📑 **View archived expenses** history anytime
     
     This app provides a simple yet powerful solution for personal budget management and financial awareness.
     """
@@ -63,7 +67,7 @@ with col1:
           - Bills
           - Other
         - **Description** - Details about the expense
-        - **Amount** - How much was spent (in dollars)
+        - **Amount** - How much was spent (in Philippine Pesos ₱)
         """
     )
 
@@ -74,6 +78,7 @@ with col2:
         - **Dashboard Statistics**
           - Total spending across all expenses
           - Number of expenses recorded
+          - Average expense amount
           - Category breakdown
         
         - **Visual Analytics**
@@ -81,9 +86,42 @@ with col2:
           - Line chart: Spending trends over time
         
         - **Detailed Views**
-          - Complete expense table
+          - Complete active expense table
           - Filtered views by category
           - Category-specific totals
+          - Archived expenses
+          - Restore functionality
+        """
+    )
+
+st.divider()
+
+# Features Section
+st.header("Key Features")
+
+feature_col1, feature_col2 = st.columns(2)
+
+with feature_col1:
+    st.subheader("✏️ Full Expense Management")
+    st.markdown(
+        """
+        - **Add** expenses quickly and easily
+        - **Edit** any existing expense details
+        - **Delete** (archive) unwanted entries
+        - **Restore** deleted expenses anytime
+        - All data preserved in archive
+        """
+    )
+
+with feature_col2:
+    st.subheader("📊 Smart Analytics")
+    st.markdown(
+        """
+        - **Real-time statistics** on dashboard
+        - **Category breakdown** of spending
+        - **Spending trends** visualized over time
+        - **Filter by category** for detailed analysis
+        - **Automatic calculations** of totals
         """
     )
 
@@ -93,7 +131,8 @@ st.info(
     """
     💡 **Getting Started:**
     1. Go to the **Add Expense** page to start recording your spending
-    2. Use the **View Expenses** page to analyze your spending patterns
-    3. Check the **Dashboard** for quick statistics and insights
+    2. Use the **View Expenses** page to manage, analyze, and organize your expenses
+    3. Check the **Dashboard** for quick statistics and visual insights
+    4. Visit the **About** page for detailed information about features
     """
 )
