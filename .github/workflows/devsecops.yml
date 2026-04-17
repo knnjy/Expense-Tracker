@@ -1,0 +1,59 @@
+name: DevSecOps Workflow
+
+# Run the workflow on pushes to the default branch and on pull requests.
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  devsecops:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Checkout the repository code into the workflow runner.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2) Set up Python, matching the repo's target runtime.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3) Install application dependencies from requirements.txt.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4) Install developer tooling used for security, build, and test checks.
+      - name: Install dev tools
+        run: |
+          pip install pytest bandit safety
+
+      # 5) Security scan: check Python dependencies for known vulnerabilities.
+      - name: Dependency security scan (Safety)
+        run: |
+          python -m safety check --full-report
+
+      # 6) Build check: ensure Python files compile successfully.
+      - name: Build validation (compile)
+        run: |
+          python -m compileall .
+
+      # 7) Security scan: run Bandit static analysis on Python source files.
+      - name: Static security scan (Bandit)
+        run: |
+          bandit -r . -ll
+
+      # 8) Test stage: run unit tests with pytest.
+      - name: Run tests
+        run: |
+          if [ -d tests ] ; then pytest ; else echo "No tests directory found; skip pytest." ; fi
+
+      # 9) Final security gate: placeholder deploy step or additional scan.
+      - name: Deploy placeholder / final security check
+        run: |
+          echo "DevSecOps pipeline completed. Add deployment actions here when ready."
