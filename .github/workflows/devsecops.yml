@@ -65,6 +65,6 @@ jobs:
           if [ -d tests ] ; then pytest ; else echo "No tests directory found; skip pytest." ; fi
 
       # 9) Final security gate: placeholder deploy step or additional scan.
-      - name: Deploy placeholder / final security check
-        run: |
-          echo "DevSecOps pipeline completed. Add deployment actions here when ready."
+      # - name: Deploy placeholder / final security check
+      #   run: |
+      #     echo "DevSecOps pipeline completed. Add deployment actions here when ready."
