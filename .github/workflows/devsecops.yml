@@ -67,7 +67,10 @@ jobs:
       # 9) DAST stage: run OWASP ZAP baseline scan against deployed Streamlit app.
       - name: OWASP ZAP Baseline Scan (Deployed)
         run: |
-          docker run -t owasp/zap2docker-stable zap-baseline.py -t https://expense-tracker-ki9qrdyyz7jevftf8pb3ac.streamlit.app/ -r zap_report.html
+          docker run --rm -v $(pwd):/zap/wrk owasp/zap2docker-stable zap-baseline.py \
+            -t https://expense-tracker-ki9qrdyyz7jevftf8pb3ac.streamlit.app/ \
+            -r zap_report.html
+
 
       # 10) Upload ZAP report as artifact for review.
       - name: Upload ZAP Report
