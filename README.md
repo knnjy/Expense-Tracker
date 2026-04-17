@@ -1,8 +1,8 @@
-Expense Tracker ni Ken
+#### Expense Tracker ni Ken
 
 A simple yet powerful Streamlit application for personal finance management and expense tracking in Philippine Pesos (₱).
 
-## 📋 Features
+## Features
 
 ### Core Functionality
 - **📝 Add Expenses** - Record daily expenses with date, category, description, and amount
