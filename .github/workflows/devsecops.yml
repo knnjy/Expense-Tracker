@@ -16,11 +16,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Secret scan: detect hardcoded API keys, passwords, and credentials.
+      - name: Secret scan (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+
       # 2) Set up Python, matching the repo's target runtime.
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      # Avoid installing everything again every run.
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
 
       # 3) Install application dependencies from requirements.txt.
       - name: Install dependencies
